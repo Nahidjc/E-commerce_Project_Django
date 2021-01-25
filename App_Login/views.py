@@ -41,3 +41,14 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return HttpResponse("Logged Out")
+
+
+@login_required
+def user_profile(request):
+    profile = Profile.objects.get(user=request.user)
+    form = ProfileForm(instance=profile)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            form = ProfileForm(instance=profile)
+    return render(request, 'App_Login/change_profile.html', context={'form': form})
