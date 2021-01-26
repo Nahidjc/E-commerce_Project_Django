@@ -10,11 +10,11 @@
                     <img src="/media/{{product.mainimage}}" style="widows: 100px; height: 300px;" alt="">
                 </div>
                 <figcaption class="info-wrap">
-                    <h6 class="title"> {{ product.name }}</h6>
+                    <h6 class="title"> <a href="#">{{ product.name }}</a> </h6>
                     <div class="action-wrap">
                         <div class="price-wrap h5">
                             <span class="price-new">&#2547; {{product.price|floatformat:2}}</span>
-                            <span class="price-old">&#2547; {{product.old_price|floatformat:2}}</span>
+                            <span class="price-old">&#2547;<strike>{{product.old_price|floatformat:2}}</strike> </span>
                         </div>
                     </div>
                 </figcaption>
