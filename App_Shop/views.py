@@ -10,3 +10,8 @@ from App_Shop.models import Product
 class Home(ListView):
     model = Product
     template_name = 'App_Shop/home.html'
+
+
+class ProductDetail(DeleteView):
+    model = Product
+    template_name = 'App_Shop/product_detail.html'
