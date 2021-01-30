@@ -63,3 +63,55 @@ def remove_from_cart(request, pk):
     else:
         messages.info(request, "You don't have an active order")
         return redirect("App_Shop:home")
+
+
+@login_required
+def increase_cart(request, pk):
+    item = get_object_or_404(Product, pk=pk)
+    order_qs = Order.objects.filter(user=request.user, ordered=False)
+    if order_qs.exists():
+        order = order_qs[0]
+        if order.orderitems.filter(item=item).exists():
+            order_item = Cart.objects.filter(
+                item=item, user=request.user, purchased=False)[0]
+            if order_item.quantity >= 1:
+                order_item.quantity += 1
+                order_item.save()
+                messages.info(
+                    request, f"{item.name} quantity has been updated")
+                return redirect("App_Order:cart")
+        else:
+            messages.info(request, f"{item.name} is not in your cart")
+            return redirect("App_Shop:home")
+    else:
+        messages.info(request, "You don't have an active order")
+        return redirect("App_Shop:home")
+
+
+@login_required
+def decrease_cart(request, pk):
+    item = get_object_or_404(Product, pk=pk)
+    order_qs = Order.objects.filter(user=request.user, ordered=False)
+    if order_qs.exists():
+        order = order_qs[0]
+        if order.orderitems.filter(item=item).exists():
+            order_item = Cart.objects.filter(
+                item=item, user=request.user, purchased=False)[0]
+            if order_item.quantity >= 1:
+                order_item.quantity -= 1
+                order_item.save()
+                messages.info(
+                    request, f"{item.name} quantity has been updated")
+                return redirect("App_Order:cart")
+            else:
+                order.orderitems.remove(order_item)
+                order_item.delete()
+                messages.warning(
+                    request, f"{item.name} item has been removed from your cart")
+                return redirect("App_Order:cart")
+        else:
+            messages.info(request, f"{item.name} is not in your cart")
+            return redirect("App_Shop:home")
+    else:
+        messages.info(request, "You don't have an active order")
+        return redirect("App_Shop:home")
