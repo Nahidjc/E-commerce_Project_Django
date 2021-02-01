@@ -20,6 +20,18 @@
 
             </div>
         </div>
+        <div class="col-md-3">
+            <div class="card" style="height: auto">
+
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        {% for order_item in order_items %}
+                        <li class="list-group-item">{{ order_item.item.name }} X {{ order_item.item.quantity }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
