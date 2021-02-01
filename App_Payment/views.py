@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def checkout(request):
     saved_address = BillingAddress.objects.get_or_create(user=request.user)
+    saved_address = saved_address[0]
     form = BillingForm(instance=saved_address)
     if request.method == 'POST':
         form = BillingForm(request.POST, instance=saved_address)
