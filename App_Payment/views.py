@@ -64,7 +64,7 @@ def payment(request):
 
     response_data = mypayment.init_payment()
     print(response_data)
-    return render(request, "App_Payment/payment.html", context={})
+    return redirect(response_data['GatewayPageURL'])
 
 
 @login_required
