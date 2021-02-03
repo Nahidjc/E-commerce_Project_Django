@@ -46,7 +46,6 @@ def payment(request):
     mypayment = SSLCSession(sslc_is_sandbox=True, sslc_store_id=store_id,
                             sslc_store_pass=API_key)
     status_url = request.build_absolute_uri(reverse('App_Payment:complete'))
-    print(status_url)
     mypayment.set_urls(success_url=status_url, fail_url=status_url,
                        cancel_url=status_url, ipn_url=status_url)
 
@@ -63,10 +62,9 @@ def payment(request):
     mypayment.set_shipping_info(shipping_to=current_user.profile.full_name, address=saved_address.address,
                                 city=saved_address.city, postcode=saved_address.zipcode, country=saved_address.country)
 
-
-response_data = mypayment.init_payment()
-
-return render(request, "App_Payment/payment.html", context={})
+    response_data = mypayment.init_payment()
+    print(response_data)
+    return render(request, "App_Payment/payment.html", context={})
 
 
 @login_required
