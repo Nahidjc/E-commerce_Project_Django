@@ -4,7 +4,7 @@ from django.contrib import messages
 from App_Order.models import Order
 from App_Payment.forms import BillingForm
 from App_Payment.models import BillingAddress
-
+from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
 import requests
@@ -44,7 +44,13 @@ def payment(request):
     API_key = 'softt601985810d2b3@ssl'
     mypayment = SSLCSession(sslc_is_sandbox=True, sslc_store_id=store_id,
                             sslc_store_pass=API_key)
-
-    mypayment.set_urls(success_url='example.com/success', fail_url='example.com/failed',
-                       cancel_url='example.com/cancel', ipn_url='example.com/payment_notification')
+    status_url = request.build_absolute_uri(reverse('App_Payment:complete'))
+    print(status_url)
+    mypayment.set_urls(success_url=status_url, fail_url=status_url,
+                       cancel_url=status_url, ipn_url=status_url)
     return render(request, "App_Payment/payment.html", context={})
+
+
+@login_required
+def complete(request):
+    return render(request, "App_Payment/complete.html", context={})
