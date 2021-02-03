@@ -35,8 +35,8 @@ def payment(request):
     saved_address = BillingAddress.objects.get_or_create(user=request.user)
     if not saved_address[0].is_fully_filled():
         messages.info(request, f"Please complete shopping address!")
-        return redirect("App_Payment;checkout")
+        return redirect("App_Payment:checkout")
     if not request.user.profile.is_fully_filled():
         messages.info(request, f"Please complete profile details!")
         return redirect("App_Login:profile")
-    return render(request, "App_Payment/payment.html",)
+    return render(request, "App_Payment/payment.html", context={})
