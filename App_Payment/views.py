@@ -39,4 +39,12 @@ def payment(request):
     if not request.user.profile.is_fully_filled():
         messages.info(request, f"Please complete profile details!")
         return redirect("App_Login:profile")
+
+    store_id = 'softt601985810d2b3'
+    API_key = 'softt601985810d2b3@ssl'
+    mypayment = SSLCSession(sslc_is_sandbox=True, sslc_store_id=store_id,
+                            sslc_store_pass=API_key)
+
+    mypayment.set_urls(success_url='example.com/success', fail_url='example.com/failed',
+                       cancel_url='example.com/cancel', ipn_url='example.com/payment_notification')
     return render(request, "App_Payment/payment.html", context={})
