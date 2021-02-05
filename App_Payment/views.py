@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponseRedirect, redirect
 from django.contrib import messages
 # Create your views here.
-from App_Order.models import Order
+from App_Order.models import Order, Cart
 from App_Payment.forms import BillingForm
 from App_Payment.models import BillingAddress
 from django.urls import reverse
@@ -78,7 +78,24 @@ def complete(request):
             tran_id = payment_data['tran_id']
             bank_tran_id = payment_data['bank_tran_id']
             messages.success(request, f"Your Payment Completed Successfully!")
+            return HttpResponseRedirect(reverse("App_Payment:purchase", kwargs={'val_id': val_id, 'tran_id': tran_id},))
         elif status == 'FAILED':
             messages.warning(
                 request, f"Your Payment Failed! Please Try Again!")
     return render(request, "App_Payment/complete.html", context={})
+
+
+@login_required
+def purchase(request, val_id, tran_id):
+    order_qs = Order.objects.filter(user=request.user, ordered=False)
+    order = order_qs[0]
+    orderId = tran_id
+    order.ordered = True
+    order.ordereId = orderId
+    order.paymentId = val_id
+    order.save()
+    cart_items = Cart.objects.filter(user=request.user, purchase=False)
+    for item in cart_items:
+        item.purchased = True
+        item.save()
+    return HttpResponseRedirect(reverse('App_Shop:home'))
