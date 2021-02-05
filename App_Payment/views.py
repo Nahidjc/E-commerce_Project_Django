@@ -70,7 +70,7 @@ def payment(request):
 
 @csrf_exempt
 def complete(request):
-    if request.method == 'POST' and request.method == 'post':
+    if request.method == 'POST' or request.method == 'post':
         payment_data = request.POST
         status = payment_data['status']
         if status == 'VALID':
