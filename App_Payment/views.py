@@ -73,10 +73,10 @@ def complete(request):
     if request.method == 'POST' and request.method == 'post':
         payment_data = request.POST
         status = payment_data['status']
-        val_id = payment_data['val_id']
-        tran_id = payment_data['tran_id']
-        bank_tran_id = payment_data['bank_tran_id']
         if status == 'VALID':
+            val_id = payment_data['val_id']
+            tran_id = payment_data['tran_id']
+            bank_tran_id = payment_data['bank_tran_id']
             messages.success(request, f"Your Payment Completed Successfully!")
         elif status == 'FAILED':
             messages.warning(
